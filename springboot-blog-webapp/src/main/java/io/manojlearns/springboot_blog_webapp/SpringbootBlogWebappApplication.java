@@ -1,13 +1,13 @@
 package io.manojlearns.springboot_blog_webapp;
 
+import io.manojlearns.springboot_blog_webapp.entity.Post;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SpringbootBlogWebappApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {SpringApplication.run(SpringbootBlogWebappApplication.class, args);}
 
-		SpringApplication.run(SpringbootBlogWebappApplication.class, args);
-	}
+
 }
