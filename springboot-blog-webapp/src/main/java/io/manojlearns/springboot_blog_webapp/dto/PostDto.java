@@ -1,5 +1,6 @@
 package io.manojlearns.springboot_blog_webapp.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +15,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostDto {
     private Long id;
+    @NotEmpty
     private String title;
     private String url;
+    @NotEmpty
     private String content;
+    @NotEmpty
     private String shortDescription;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;

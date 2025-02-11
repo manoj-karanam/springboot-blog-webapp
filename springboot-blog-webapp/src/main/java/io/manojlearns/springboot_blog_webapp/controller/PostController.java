@@ -2,8 +2,10 @@ package io.manojlearns.springboot_blog_webapp.controller;
 
 import io.manojlearns.springboot_blog_webapp.dto.PostDto;
 import io.manojlearns.springboot_blog_webapp.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +41,12 @@ public class PostController {
 
     //handler method to handle form submit request
     @PostMapping("admin/posts")
-    public String createPost(@ModelAttribute PostDto postDto){
+    public String createPost(@Valid @ModelAttribute("post") PostDto postDto, BindingResult result, Model model){
+
+        if (result.hasErrors()){
+            model.addAttribute("post", postDto);
+            return "admin/create_post";
+        }
         postDto.setUrl(getUrl(postDto.getTitle()));
         postService.createPost(postDto);
         return "redirect:/admin/posts";
