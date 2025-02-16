@@ -49,4 +49,10 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findPostByUrl(postUrl).get();
         return PostMapper.maptoPostDto(post);
     }
+
+    @Override
+    public List<PostDto> searchPosts(String query) {
+        List<Post> posts = postRepository.searchPosts(query);
+        return posts.stream().map(PostMapper::maptoPostDto).collect(Collectors.toList());
+    }
 }
