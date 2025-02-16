@@ -14,12 +14,13 @@
                 <div th:each="post:${postsResponse}">
 
                     <div class="card">
-                        <div class="card=header">
+                        <div class="card-header">
                             <a th:href="@{/post/{postUrl}(postUrl=${post.url})}"><h3 th:text="${post.title}"></h3></a>
+                            <div>
+                                <strong th:text="${#temporals.format(post.CreatedOn, 'dd MMMM yyyy')}"></strong>
+                            </div>
                         </div>
-                        <div>
-                            <strong th:text="${#temporals.format(post.CreatedOn, 'dd MMMM yyyy')}"></strong>
-                        </div>
+
                         <div class="card-body">
                             <p th:text="${post.shortDescription}"></p><a th:href="@{post/{postUrl}(postUrl=${post.url})}">read more</a>
                         </div>
