@@ -1,6 +1,7 @@
 package io.manojlearns.springboot_blog_webapp.controller;
 
 
+import io.manojlearns.springboot_blog_webapp.dto.CommentDto;
 import io.manojlearns.springboot_blog_webapp.dto.PostDto;
 import io.manojlearns.springboot_blog_webapp.service.PostService;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,9 @@ public class BlogController {
     @GetMapping("post/{postUrl}")
     public String showPost(@PathVariable("postUrl") String postUrl, Model model){
         PostDto post = postService.findPostByUrl(postUrl);
+        CommentDto commentDto = new CommentDto();
         model.addAttribute("post", post);
+        model.addAttribute("comment", commentDto);
         return "blog/blog_post";
     }
 
@@ -46,4 +49,6 @@ public class BlogController {
         model.addAttribute("postsResponse", postsResponse);
         return "blog/view_posts";
     }
+
+
 }

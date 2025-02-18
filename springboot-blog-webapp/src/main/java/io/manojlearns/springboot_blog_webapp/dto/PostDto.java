@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -24,5 +25,6 @@ public class PostDto {
     private String shortDescription;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    private Set<CommentDto> comments;
 
 }
