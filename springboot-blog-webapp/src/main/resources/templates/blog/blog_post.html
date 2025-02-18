@@ -21,6 +21,7 @@
             <p><b>Name:</b><strong th:text="${comment.name}"></strong></p>
             <p><b>Date:</b><strong th:text="${#temporals.format(comment.createdOn, 'dd MMMM yyyy')}"></strong></p>
             <p th:text="${comment.content}"></p>
+            <br><br>
           </div>
         </div>
         <div class="card">
