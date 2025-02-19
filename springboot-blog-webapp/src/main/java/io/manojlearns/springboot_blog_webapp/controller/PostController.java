@@ -1,6 +1,8 @@
 package io.manojlearns.springboot_blog_webapp.controller;
 
+import io.manojlearns.springboot_blog_webapp.dto.CommentDto;
 import io.manojlearns.springboot_blog_webapp.dto.PostDto;
+import io.manojlearns.springboot_blog_webapp.service.CommentService;
 import io.manojlearns.springboot_blog_webapp.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,11 @@ import java.util.List;
 public class PostController {
 
     private PostService postService;
+    private CommentService commentService;
 
-    public PostController(PostService postService){
+    public PostController(PostService postService, CommentService commentService){
         this.postService=postService;
+        this.commentService=commentService;
     }
 
     //create handler method, GET request and return model and view
@@ -89,6 +93,21 @@ public class PostController {
         List<PostDto> posts = postService.searchPosts(query);
         model.addAttribute("posts", posts);
         return "admin/posts";
+    }
+
+    //handler method to display the comments
+    @GetMapping("admin/posts/comments")
+    public String postComments(Model model){
+        List<CommentDto>  comments = commentService.findAllComments();
+        model.addAttribute("comments", comments);
+        return "admin/comments";
+    }
+
+    //handler method to delete a comment
+    @GetMapping("/admin/posts/comments/{commentId}")
+    public String deleteComment(@PathVariable("commentId") Long commentId){
+        commentService.deleteComment(commentId);
+        return "redirect:/admin/posts/comments";
     }
 
 

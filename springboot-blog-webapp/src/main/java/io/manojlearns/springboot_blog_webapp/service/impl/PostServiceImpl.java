@@ -55,4 +55,7 @@ public class PostServiceImpl implements PostService {
         List<Post> posts = postRepository.searchPosts(query);
         return posts.stream().map(PostMapper::maptoPostDto).collect(Collectors.toList());
     }
+
+
+
 }
