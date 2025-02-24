@@ -4,6 +4,8 @@ import io.manojlearns.springboot_blog_webapp.dto.CommentDto;
 import io.manojlearns.springboot_blog_webapp.dto.PostDto;
 import io.manojlearns.springboot_blog_webapp.service.CommentService;
 import io.manojlearns.springboot_blog_webapp.service.PostService;
+import io.manojlearns.springboot_blog_webapp.util.ROLE;
+import io.manojlearns.springboot_blog_webapp.util.SecurityUtils;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+
 
 @Controller
 public class PostController {
@@ -27,7 +30,14 @@ public class PostController {
     //create handler method, GET request and return model and view
     @GetMapping("/admin/posts")
     public String posts(Model model){
-        List<PostDto> posts = postService.findAllPosts();
+        String role = SecurityUtils.getRole();
+        List<PostDto> posts = null;
+        if(ROLE.ROLE_ADMIN.name().equals(role)){
+            posts= postService.findAllPosts();
+        }
+        else{
+            posts = postService.findPostsByUser();
+        }
         model.addAttribute("posts", posts);   //key-posts and value-posts
         return "/admin/posts";
     }
@@ -71,6 +81,23 @@ public class PostController {
         model.addAttribute("post", postDto);
         return "admin/edit_post";
     }
+
+    // handler method to handle edit post form submit request
+    @PostMapping("/admin/posts/{postId}")
+    public String updatePost(@PathVariable("postId") Long postId,
+                             @Valid @ModelAttribute("post") PostDto post,
+                             BindingResult result,
+                             Model model){
+        if(result.hasErrors()){
+            model.addAttribute("post", post);
+            return "admin/edit_post";
+        }
+
+        post.setId(postId);
+        postService.updatePost(post);
+        return "redirect:/admin/posts";
+    }
+
     //handler method to handle delete post request
     @GetMapping("admin/posts/{postId}/delete")
     public  String deletePostForm(@PathVariable("postId") Long postId){
@@ -98,7 +125,14 @@ public class PostController {
     //handler method to display the comments
     @GetMapping("admin/posts/comments")
     public String postComments(Model model){
-        List<CommentDto>  comments = commentService.findAllComments();
+        String role = SecurityUtils.getRole();
+        List<CommentDto> comments = null;
+        if(ROLE.ROLE_ADMIN.name().equals(role)){
+            comments = commentService.findAllComments();
+        }
+        else{
+            comments = commentService.findCommentByPost();
+        }
         model.addAttribute("comments", comments);
         return "admin/comments";
     }

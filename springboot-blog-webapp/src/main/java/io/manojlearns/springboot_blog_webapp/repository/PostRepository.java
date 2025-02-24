@@ -22,4 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
 //    void deleteById(Long Id);
+
+    @Query(value = "select * from posts p where p.created_by=:userId", nativeQuery = true)
+    List<Post> findPostByUser(Long userId);
 }

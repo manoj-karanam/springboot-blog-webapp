@@ -48,4 +48,9 @@ public class AuthController {
         userService.saveUser(user);
         return "redirect:/register?success";
     }
+
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
 }

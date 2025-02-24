@@ -3,10 +3,13 @@ package io.manojlearns.springboot_blog_webapp.service.impl;
 import io.manojlearns.springboot_blog_webapp.dto.CommentDto;
 import io.manojlearns.springboot_blog_webapp.entity.Comment;
 import io.manojlearns.springboot_blog_webapp.entity.Post;
+import io.manojlearns.springboot_blog_webapp.entity.User;
 import io.manojlearns.springboot_blog_webapp.mapper.CommentMapper;
 import io.manojlearns.springboot_blog_webapp.repository.CommentRepository;
 import io.manojlearns.springboot_blog_webapp.repository.PostRepository;
+import io.manojlearns.springboot_blog_webapp.repository.UserRepository;
 import io.manojlearns.springboot_blog_webapp.service.CommentService;
+import io.manojlearns.springboot_blog_webapp.util.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +20,15 @@ public class CommentServiceImpl implements CommentService {
 
     private PostRepository postRepository;
     private CommentRepository commentRepository;
+    private UserRepository userRepository;
 
-    public CommentServiceImpl(PostRepository postRepository, CommentRepository commentRepository) {
+    public CommentServiceImpl(PostRepository postRepository,
+                              CommentRepository commentRepository,
+                              UserRepository userRepository) {
+
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
+        this.userRepository=userRepository;
     }
 
 
@@ -42,5 +50,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    @Override
+    public List<CommentDto> findCommentByPost() {
+        String email = SecurityUtils.getCurrentUser().getUsername();
+        User createdBy = userRepository.findByEmail(email);
+        Long userId=createdBy.getId();
+        List<Comment> comments =  commentRepository.findCommentsByPost(userId);
+        return comments.stream()
+                .map((comment)->CommentMapper.mapToCommentDto(comment))
+                .collect(Collectors.toList());
+
     }
 }
